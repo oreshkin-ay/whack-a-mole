@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo, useState, useCallback } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 
 import "./App.css";
 
@@ -81,7 +81,47 @@ function App() {
     return m;
   }, [fieldFlat]);
 
-  return <div className="App">dsd {time}</div>;
+  return (
+    <div>
+      {!start && <button onClick={handleStart}>start</button>}
+      {start && (
+        <>
+          <p>Time:{time}</p> <p>Score: {score}</p>{" "}
+        </>
+      )}
+      {start &&
+        matrix.map((row, rowIndex) => {
+          return (
+            <div className="row" key={rowIndex}>
+              {row.map((cell, cellIndex) => {
+                const id = rowIndex * 3 + cellIndex;
+                return (
+                  <button
+                    key={cellIndex}
+                    onClick={() => handleClick(id)}
+                    className="cell"
+                  >
+                    <img
+                      alt=""
+                      className="item"
+                      hidden={!showed.has(id)}
+                      id={id}
+                      src="https://www.greatfrontend.com/img/questions/whack-a-mole/mole-head.png"
+                    />
+
+                    <img
+                      alt="12"
+                      className="hool"
+                      src="https://www.greatfrontend.com/img/questions/whack-a-mole/mole-hill.png"
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          );
+        })}
+    </div>
+  );
 }
 
 export default App;
