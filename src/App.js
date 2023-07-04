@@ -1,6 +1,8 @@
 import { useEffect, useRef, useMemo, useState } from "react";
+import Confetti from "react-confetti";
 
 import "./App.css";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 const shuffle = (arr) => {
   for (let i = 0; i < arr.length; i++) {
@@ -36,6 +38,8 @@ const scoreMap = {
 };
 
 function App() {
+  const { width, height } = useWindowSize();
+
   const [fieldFlat, setFieldFlat] = useState(
     new Array(3 * 3).fill(0).map((_, index) => index)
   );
@@ -44,6 +48,7 @@ function App() {
   const [time, setTime] = useState(30);
   const [score, setScore] = useState(0);
   const [clicked, setCliked] = useState(null);
+  const [showConfetti, setShowConfetti] = useState(null);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -79,6 +84,8 @@ function App() {
 
   const handleStart = () => {
     setStart(true);
+    setShowConfetti(false);
+
     ref.current = setInterval(() => {
       setTime((prev) => {
         if (prev <= 0) {
@@ -88,6 +95,7 @@ function App() {
           setTime(30);
           setScore(0);
           setCliked(null);
+          setShowConfetti(true);
           return 0;
         }
         return prev - 1;
@@ -134,6 +142,7 @@ function App() {
 
   return (
     <div className="wrapper">
+      {showConfetti && <Confetti width={width} height={height} />}
       {!start && <button onClick={handleStart}>start</button>}
       {start && (
         <>
