@@ -6,7 +6,7 @@ import { useWindowSize } from "@uidotdev/usehooks";
 
 const shuffle = (arr) => {
   for (let i = 0; i < arr.length; i++) {
-    const index = Math.floor(Math.random() * (arr.length - 1 - 0 + 1)) + 0;
+    const index = Math.floor(Math.random() * (arr.length - 1 - i + 1)) + i;
     [arr[i], arr[index]] = [arr[index], arr[i]];
   }
   return arr;
@@ -56,7 +56,7 @@ function App() {
     let timerId;
     timerId = setInterval(() => {
       setFieldFlat((prev) => {
-        const arr = shuffle(prev);
+        const arr = shuffle(new Array(3 * 3).fill(0).map((_, index) => index));
         setShowed((prev) => {
           const copy = new Set(arr.slice(0, 2));
           return copy;
