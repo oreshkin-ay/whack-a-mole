@@ -26,15 +26,15 @@ const imgMap = {
 };
 
 const scoreMap = {
-  0: -5,
-  1: +15,
-  2: +5,
+  0: -25,
+  1: 5,
+  2: 5,
   3: -5,
-  4: +25,
-  5: +5,
-  6: +5,
+  4: 5,
+  5: 5,
+  6: 5,
   7: -5,
-  8: +15,
+  8: 5,
 };
 
 function App() {
@@ -143,6 +143,8 @@ function App() {
   return (
     <div className="wrapper">
       {showConfetti && <Confetti width={width} height={height} />}
+
+      {showConfetti && <h1>С Днем Рождения!</h1>}
       {!start && <button onClick={handleStart}>start</button>}
       {start && (
         <>
