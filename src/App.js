@@ -20,19 +20,19 @@ const imgMap = {
   6: "rom.png",
 
   7: "kate.png",
-  8: "oleg.png",
+  8: "shelist.png",
 };
 
 const scoreMap = {
   0: -5,
   1: +15,
   2: +5,
-  3: +5,
-  4: -15,
-  5: +1,
+  3: -5,
+  4: +25,
+  5: +5,
   6: +5,
   7: -5,
-  8: -5,
+  8: +15,
 };
 
 function App() {
@@ -84,6 +84,10 @@ function App() {
         if (prev <= 0) {
           clearInterval(ref.current);
           setStart(false);
+          setShowed(new Set());
+          setTime(30);
+          setScore(0);
+          setCliked(null);
           return 0;
         }
         return prev - 1;
@@ -186,11 +190,7 @@ function App() {
                         )}
                       </div>
 
-                      <img
-                        alt="12"
-                        className="hool"
-                        src="mole-hill.png"
-                      />
+                      <img alt="12" className="hool" src="mole-hill.png" />
                     </button>
                   );
                 })}
