@@ -26,7 +26,7 @@ const imgMap = {
 };
 
 const scoreMap = {
-  0: -25,
+  0: -5,
   1: 5,
   2: 5,
   3: -5,
