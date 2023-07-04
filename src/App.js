@@ -85,6 +85,7 @@ function App() {
   const handleStart = () => {
     setStart(true);
     setShowConfetti(false);
+    setScore(0);
 
     ref.current = setInterval(() => {
       setTime((prev) => {
@@ -93,7 +94,6 @@ function App() {
           setStart(false);
           setShowed(new Set());
           setTime(30);
-          setScore(0);
           setCliked(null);
           setShowConfetti(true);
           return 0;
@@ -144,7 +144,12 @@ function App() {
     <div className="wrapper">
       {showConfetti && <Confetti width={width} height={height} />}
 
-      {showConfetti && <h1>С Днем Рождения!</h1>}
+      {showConfetti && (
+        <>
+          <h1>С Днем Рождения!</h1>
+          <h2>Score: {score}</h2>
+        </>
+      )}
       {!start && <button onClick={handleStart}>start</button>}
       {start && (
         <>
