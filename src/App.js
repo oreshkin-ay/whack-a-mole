@@ -10,6 +10,31 @@ const shuffle = (arr) => {
   return arr;
 };
 
+const imgMap = {
+  0: "oleg.png",
+  1: "shelist.png",
+  2: "arh.png",
+  3: "kate.png",
+  4: "or.png",
+  5: "kir.png",
+  6: "rom.png",
+
+  7: "kate.png",
+  8: "oleg.png",
+};
+
+const scoreMap = {
+  0: -5,
+  1: +15,
+  2: +5,
+  3: +5,
+  4: -15,
+  5: +1,
+  6: +5,
+  7: -5,
+  8: -5,
+};
+
 function App() {
   const [fieldFlat, setFieldFlat] = useState(
     new Array(3 * 3).fill(0).map((_, index) => index)
@@ -18,6 +43,7 @@ function App() {
   const [showed, setShowed] = useState(new Set());
   const [time, setTime] = useState(30);
   const [score, setScore] = useState(0);
+  const [clicked, setCliked] = useState(null);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -47,7 +73,8 @@ function App() {
       copy.delete(index);
       return copy;
     });
-    setScore((prev) => prev + 1);
+    setScore((prev) => prev + scoreMap[index]);
+    setCliked(index);
   };
 
   const handleStart = () => {
@@ -70,6 +97,26 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (clicked === 2) {
+      const c = Math.floor(Math.random() * 16777215).toString(16);
+      document.body.style.backgroundColor = `#${c}14`;
+    } else if (clicked === 3 || clicked === 7) {
+      const prevScale = document.querySelector("#block").style.transform;
+
+      if (prevScale) {
+        let values = prevScale.split("(")[1];
+        values = values.split(")")[0];
+        values = values.split(".");
+        document.querySelector("#block").style.transform = `scale(1.${
+          +values[1] + 1
+        })`;
+      } else {
+        document.querySelector("#block").style.transform = `scale(1.1)`;
+      }
+    }
+  }, [clicked]);
+
   const matrix = useMemo(() => {
     const m = [];
     for (let i = 0; i < fieldFlat.length; i++) {
@@ -82,44 +129,75 @@ function App() {
   }, [fieldFlat]);
 
   return (
-    <div>
+    <div className="wrapper">
       {!start && <button onClick={handleStart}>start</button>}
       {start && (
         <>
-          <p>Time:{time}</p> <p>Score: {score}</p>{" "}
+          <p>Time:{time}</p>
+          <div>
+            <p>Score: {score}</p>
+          </div>
         </>
       )}
-      {start &&
-        matrix.map((row, rowIndex) => {
-          return (
-            <div className="row" key={rowIndex}>
-              {row.map((cell, cellIndex) => {
-                const id = rowIndex * 3 + cellIndex;
-                return (
-                  <button
-                    key={cellIndex}
-                    onClick={() => handleClick(id)}
-                    className="cell"
-                  >
-                    <img
-                      alt=""
-                      className="item"
-                      hidden={!showed.has(id)}
-                      id={id}
-                      src="https://www.greatfrontend.com/img/questions/whack-a-mole/mole-head.png"
-                    />
+      <div id="block" className="block">
+        {start &&
+          matrix.map((row, rowIndex) => {
+            return (
+              <div className="row" key={rowIndex}>
+                {row.map((cell, cellIndex) => {
+                  const id = rowIndex * 3 + cellIndex;
+                  return (
+                    <button
+                      key={cellIndex}
+                      onClick={() => handleClick(id)}
+                      className="cell"
+                    >
+                      <img
+                        alt=""
+                        className="item"
+                        hidden={!showed.has(id)}
+                        id={id}
+                        src={imgMap[id]}
+                      />
+                      <div
+                        className={[
+                          "score",
+                          clicked === id ? "hideMe" : "",
+                          scoreMap[clicked] < 0 ? "red" : "",
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
+                      >
+                        {clicked === id &&
+                          `${scoreMap[clicked] > 0 ? "+" : ""}${
+                            scoreMap[clicked]
+                          }`}
 
-                    <img
-                      alt="12"
-                      className="hool"
-                      src="https://www.greatfrontend.com/img/questions/whack-a-mole/mole-hill.png"
-                    />
-                  </button>
-                );
-              })}
-            </div>
-          );
-        })}
+                        {clicked === id && id === 5 && (
+                          <div className={["kir"].filter(Boolean).join(" ")}>
+                            <img
+                              alt=""
+                              className="item"
+                              id={id}
+                              style={{ height: 38, width: 38 }}
+                              src={"vue.png"}
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      <img
+                        alt="12"
+                        className="hool"
+                        src="mole-hill.png"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            );
+          })}
+      </div>
     </div>
   );
 }
